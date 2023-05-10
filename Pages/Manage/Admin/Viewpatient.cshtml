@@ -1,0 +1,260 @@
+﻿@page
+@model Capstonep2.Pages.Manage.Admin.ViewpatientModel
+@{
+}
+
+
+<!-- Modal -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-autos">
+<div class="card bg-mustardlite">
+
+    <div class="card-body">
+        <table class="table table-striped">
+            <tr>
+                <th>Name:</th>
+                <td>@ViewData["firstname"] @ViewData["middlename"] @ViewData["lastname"]</td>
+            </tr>
+            <tr>
+                <th>Gender:</th>
+                <td>@ViewData["gender"]</td>
+            </tr>
+            <tr>
+                <th>Birthdate:</th>
+                <td>@ViewData["birthdate"]</td>
+            </tr>
+            <tr>
+                <th>Address:</th>
+                <td>@ViewData["address"]</td>
+            </tr>
+        </table>
+
+
+    </div>
+
+</div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-autos">
+
+
+            @if (Model.View != null && Model.View.Appointments != null && Model.View.Appointments.Count > 0)
+            {
+                <table class="table table-bordered bg-mustardlite">
+                    <thead class="table-dark">
+                        <tr class="thead-gray">
+                            <th scope="col">Date And Time</th>
+                            <th scope="col">Type Of Vist</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            foreach (var appointment in Model?.View?.Appointments)
+                            {
+                                <tr class="table-light">
+                                    <td>@appointment.StartTime</td>
+                                    <td>@appointment.Visit</td>
+                                    <td>@appointment.Status</td>
+                                    <td>
+                                        <!--Button For Modal Trigger-->
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="@string.Format("#pfmodal{0}", appointment.ID)">
+                                            <i class="fa fa-pencil">View</i>
+                                        </button>
+                                        <!--Button For Modal Trigger-->
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="@string.Format("pfmodal{0}", appointment.ID)" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Consultation</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="col-auto ">
+                                                            <!-- Prescription and Finding -->
+                                                            
+                                                            @foreach(var consultation in Model?.View.ConsultationRecords)
+                                                            {
+                                                                @if (consultation.AppointmentID == appointment.ID )
+                                                                {
+                                                                    @if (Model?.View?.Prescriptions != null)
+                                                                    {
+                                                                        @foreach (var prescription in Model?.View?.Prescriptions)
+                                                                        {
+                                                                            if (prescription.ConsultationRecordID == consultation.ID)
+                                                                            {
+                                                                                <div class="card bg-mustardlite">
+                                                                                    <div class="card-header">
+                                                                                        <span class="justify-content-center">PRESCRIPTIONS</span>
+                                                                                    </div>
+                                                                                    <div class="card-body">
+                                                                                        <div class="card-group">
+                                                                                            <span>Tags: @prescription.Tags</span>
+                                                                                        </div>
+                                                                                        <div class="card-group">
+                                                                                            <span>Descriptions: @prescription.Description</span>
+                                                                                        </div>
+                                                                                        
+                                                                                    </div>
+                                                                                </div>
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    @if (Model?.View?.Findings != null)
+                                                                    {
+                                                                        @foreach (var finding in Model?.View?.Findings)
+                                                                        {
+                                                                            if (finding.ConsultationRecordID == consultation.ID)
+                                                                            {
+                                                                                <div class="card bg-mustardlite">
+                                                                                    <div class="card-header">
+                                                                                        <span class="justify-content-center">FINDINGS</span>
+                                                                                    </div>
+                                                                                    <div class="card-body">
+                                                                                       
+                                                                                        <div class="card-group">
+                                                                                            <span> Tags: @finding.Tags</span>
+                                                                                        </div>
+                                                                                        <div class="card-group">
+                                                                                            <span> Descriptions: @finding.Description</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    
+                                                                }
+                                                            }
+                                                           
+
+
+                                                           
+
+                                                            <!-- Prescription and Finding -->
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal -->
+
+                                    </td>
+                                   
+                                   
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+
+            }
+        </div>
+    </div>
+</div>
+
+
+
+<!--Button For Modal Trigger-->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-autos">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#Record">
+                <i class="fa fa-pencil">Create Consultaion</i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Record" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-mustardlite">
+            <div class="modal-header bg-mustardlite">
+                <h5 class="modal-title bg-mustardlite" id="exampleModalLabel">Create New Consultation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+            </div>
+            <div class="modal-body bg-mustardlite">
+                <div class="col-auto ">
+                    <form method="Post" asp-page-handler="NewRecord">
+                        <div class="form-group justify-content-center">
+                            <label asp-for="View.StartTime">StartTime</label>
+                            <input type="datetime-local" id="picker" data-format="mm-dd-yyyy" class="form-control" placeholder="Enter user name" asp-for="View.StartTime">
+                        </div>
+                        <div class="form-group justify-content-center">
+                            <label asp-for="View.Symptom">Symptoms</label>
+                            <input type="text" class="form-control" placeholder="Symptoms" maxlength="500" asp-for="View.Symptom">
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="View.Purpose">Purpose Of Visit</label>
+                            <select asp-for="View.Purpose" class="form-control" id="Sex">
+                                <option value="1">Check Up</option>
+                                <option value="2">Follow Up</option>
+                                <option value="3">Eye Grade Check</option>
+                                <option value="4">Broken Eyeglasses</option>
+                                <option value="5">Refill Contact Solutions</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="View.FTags">Finding Tags</label>
+                            <input type="text" class="form-control" placeholder="Enter Finding Tags" maxlength="500" asp-for="View.FTags">
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="View.FDescription">Finding Description</label>
+                            <input type="text" class="form-control" placeholder="Enter Finding Description" maxlength="500" asp-for="View.FDescription">
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="View.PTags">Prescription Tags</label>
+                            <input type="text" class="form-control" placeholder="Enter Finding Tags" maxlength="500" asp-for="View.PTags">
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="View.PDescription"> Precription Description</label>
+                            <input type="text" class="form-control" placeholder="Enter  Prescription Description" maxlength="500" asp-for="View.PDescription">
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" placeholder="Enter Address" asp-for="View.Patient.ID" value="@ViewData["id"]">
+                        </div>
+                        <div class="form-group alert-danger">
+                            @Html.ValidationSummary()
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Create</button>
+                            <a href="~/manage/admin/Dashboard" class="btn btn-secondary">Cancel</a>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+            
+        
+        
+        
+
+       
+        
+     
+
+
+
+
+        

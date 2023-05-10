@@ -1,0 +1,141 @@
+﻿@page
+@model Capstonep2.Pages.Manage.Consultation.IndexModel
+@using Infrastructure.Domain.Models.Enums
+@{
+}
+
+
+    <table class="table table-bordered bg-mustardlite">
+        <thead class="table-dark">
+            <tr class="thead-gray">
+            <th scope="col">Patient</th>
+            <th scope="col">Date </th>
+            <th scope="col">Time</th>
+            <th scope="col">Symptoms</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var appointment in Model?.View?.Appointments)
+                {
+                    <tr class="table-light">
+                         <td>@appointment.StartTime.Value.ToString("dd/MM/yyyy")</td>
+                         <td>@appointment.StartTime.Value.ToString("H:mm tt") - @appointment.EndTime.Value.ToString("H:mm tt")</td>
+                         <td>@appointment.Patient.FirstName @appointment.Patient.LastName  </td>
+                         <td>@appointment.Symptom</td>
+                         <td>InProgress</td>
+                        <td>
+
+                       
+                        
+                                <!--Button For Modal Trigger-->
+                                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@string.Format("#editmodal{0}", appointment.Patient.ID)">
+                                    <i class="fa fa-pencil">Create Consultation</i>
+                                </button>
+                                <!--Button For Modal Trigger-->
+                                <!--Modal-->
+                                <div class="modal " id="@string.Format("editmodal{0}",appointment.Patient.ID)" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <div class="col-auto">
+
+                                                    <div class="row justify-content-md-center">
+                                                        <div class="col-4">
+                                                            <div class="card border border-dark bg-mustardlite">
+                                                                <div class="card-header justify-content-center">
+                                                                    <h3 class="justify-content-center fw-bold">Edit Profile</h3>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <form method="Post">
+
+                                                                        <div class="form-group">
+                                                                            <label asp-for="View.FTags">Finding Tags</label>
+                                                                    <input type="text" class="form-control" placeholder="Enter Finding Tags" maxlength="500" asp-for="View.FTags">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label asp-for="View.FDescription">Finding Description</label>
+                                                                    <input type="text" class="form-control" placeholder="Enter Finding Description" maxlength="500" asp-for="View.FDescription">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label asp-for="View.PTags">Prescription Tags</label>
+                                                                    <input type="text" class="form-control" placeholder="Enter Finding Tags" maxlength="500" asp-for="View.PTags">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label asp-for="View.PDescription"> Precription Description</label>
+                                                                    <input type="text" class="form-control" placeholder="Enter  Prescription Description" maxlength="500" asp-for="View.PDescription">
+                                                                        </div>
+                                                                <div class="form-group">
+                                                                    <input type="hidden" class="form-control" placeholder="Enter Address" asp-for="View.AppointmentId" value="@appointment.ID">
+                                                                </div>
+                                                                        <div class="form-group alert-danger">
+                                                                            @Html.ValidationSummary()
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <button type="submit" class="btn btn-primary">Create</button>
+                                                                            <a href="~/manage/Consultations" class="btn btn-secondary">Cancel</a>
+                                                                        </div>
+
+
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href="link-here" class="btn btn-primary">Proceed</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Modal-->
+                        
+                        </td>
+                        <td>
+
+                        <!--Button For Modal Trigger-->
+                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@string.Format("#detailmodal{0}", appointment.Patient.ID)">
+                            <i class="fa fa-pencil">Details</i>
+                        </button>
+                        <!--Button For Modal Trigger-->
+                        <!--Modal-->
+                        <div class="modal " id="@string.Format("detailmodal{0}",appointment.Patient.ID)" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="col-auto">
+
+                                         
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="link-here" class="btn btn-primary">Proceed</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Modal-->
+                        
+                        </td>
+
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>

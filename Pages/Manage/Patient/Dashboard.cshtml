@@ -1,0 +1,568 @@
+﻿@page
+@model Capstonep2.Pages.Manage.Patient.DashboardModel
+@using Capstonep2.Infrastructure.Domain.Models.Enums;
+@using Capstonep2.Infrastructure.Domain.Security;
+@{
+}
+<div class="col-auto">
+    <br />
+    <ul class="nav nav-tabs" role="tablist">
+
+        <li class="nav-item">
+            <button href="#profile" class="nav-link active" role="tab" data-bs-toggle="tab">PROFILE</button>
+        </li>
+
+        <li class="nav-item">
+            <button href="#settings" class="nav-link" role="tab" data-bs-toggle="tab">PROFILE SETTING</button>
+        </li>
+
+        <li class="nav-item">
+            <button href="#rec" class="nav-link " role="tab" data-bs-toggle="tab">RECORD</button>
+        </li>
+        <li class="nav-item">
+            <button href="#appts" class="nav-link " role="tab" data-bs-toggle="tab">REQUEST APPOINTMENT</button>
+        </li>
+
+
+
+    </ul>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="profile">
+            <div class="card bg-mustardlite">
+
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Name:</th>
+                            <td>@ViewData["firstname"] @ViewData["middlename"] @ViewData["lastname"]</td>
+                        </tr>
+                        <tr>
+                            <th>Gender:</th>
+                            <td>@ViewData["gender"]</td>
+                        </tr>
+                        <tr>
+                            <th>Birthdate:</th>
+                            <td>@ViewData["birthdate"]</td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td>@ViewData["email"]</td>
+                        </tr>
+                        <tr>
+                            <th>Address:</th>
+                            <td>@ViewData["address"]</td>
+                        </tr>
+                    </table>
+
+
+                </div>
+                <div class="card-footer">
+                    <div id="printable">
+                        <div id="qrcode"></div>
+                    </div>
+                    <button id="rprint">PRINT</button>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+
+
+
+        <div role="tabpanel" class="tab-pane" id="settings">
+
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseChangeInfo">
+                Change User Info
+            </button>
+            <div class="collapse" id="collapseChangeInfo">
+            <form method="Post" asp-page-handler="ChangeProfile">
+                <div class="form-group">
+                    <label asp-for="View.FirstName">First Name</label>
+                    <input type="text" class="form-control" placeholder="Enter First Name" asp-for="View.FirstName" id="FName">
+                </div>
+                <div class="form-group">
+                    <label asp-for="View.MiddleName">Middle Name</label>
+                    <input type="text" class="form-control" placeholder="Enter Middle Name" asp-for="View.MiddleName">
+                </div>
+                <div class="form-group">
+                    <label asp-for="View.LastName">Last Name</label>
+                    <input type="text" class="form-control" placeholder="Enter Last Name" asp-for="View.LastName">
+                </div>
+                <div class="form-group">
+                    <label asp-for="View.Address">Address</label>
+                    <input type="text" class="form-control" placeholder="Enter Address" asp-for="View.Address">
+                </div>
+            
+
+                <div class="form-group alert-danger">
+                    @Html.ValidationSummary()
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+            </div>
+
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseChangePass">
+                Change Password
+            </button>
+            
+            <div class="collapse" id="collapseChangePass">
+                <form method="Post" asp-page-handler="ChangePass">
+                    <div class="form-group">
+                        <label asp-for="View.CurrentPass">Current Password</label>
+                        <input asp-for="View.CurrentPass" type="text" class="form-control" placeholder="Enter Current password">
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="View.NewPass">New Password</label>
+                        <input asp-for="View.NewPass" type="text" class="form-control" placeholder="Enter New password">
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="View.RetypedPassword">Re-type New Password</label>
+                        <input asp-for="View.RetypedPassword" type="text" class="form-control" placeholder="Enter new Password">
+                    </div>
+                    <div class="form-group alert-danger">
+                        @Html.ValidationSummary()
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Update password</button>
+                        <a href="~/dashboard/patient" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+        <div role="tabpanel" class="tab-pane" id="appts">
+            <div class="row justify-content-md-center">
+                <div class="container-fluid">
+
+                    <div class="card border border-dark bg-mustardlite">
+                        <div class="card-header justify-content-center">
+                            <h3 class="justify-content-center fw-bold">Create Appointment</h3>
+                        </div>
+                        <div class="card-body bg-mustardlite">
+                            <div class="container">
+                                <form method="Post" asp-page-handler="Appointment">
+                                    <div class="form-group justify-content-center">
+                                        <label asp-for="View.StartTime">StartTime</label>
+                                        <input type="datetime-local" id="picker" data-format="mm-dd-yyyy" class="form-control" placeholder="Enter user name" asp-for="View.StartTime">
+                                    </div>
+                                   
+                                   
+
+                                    <div class="form-group alert-danger">
+                                        @Html.ValidationSummary()
+                                    </div>
+                                    <div class="row align-content-center justify-content-center">
+                                        <button type="submit" class=" col-5 btn btn-primary border border-light justify-content-center">Submit</button>
+                                    </div>
+                                    <div class="row align-content-center justify-content-center">
+                                        <a href="~/manage/dashboard/patient/" class=" col-5 btn btn-primary border border-light justify-content-center">Cancel</a>
+                                    </div>
+                                </form>
+                                <label>SYMPTOMS</label>
+                                <div class="form-group justify-content-center">
+                                    <div class="row">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <select class="form-control selectSymptoms" name="View.SelectedSymptoms" multiple>
+                                                    @{
+                                                        if (Model.SelectedSymptoms != null && Model.SelectedSymptoms.Count() > 0)
+                                                        {
+                                                            foreach (var symptomas in Model.SelectedSymptoms)
+                                                            {
+                                                                <option selected value="@symptomas.SId">@symptomas.SValue</option>
+                                                            }
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="rec">
+            <div class="row">
+               
+                <div class="col-3">
+                    <div class="form-group">
+                        <label for="">Filter by Status</label>
+                        <select class="form-control" id="recfilterBy" asp-for="View.StatusFilters">
+                            <option value="completed">Completed</option>
+                            <option value="pending">Pending</option>
+                            <option value="noshow">Noshow</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label for="">Filter by Date</label>
+                        <input type="date" class="form-control" id="recfilterDate" placeholder="Select date">
+                    </div>
+                </div>
+            </div>
+
+
+            <table class="table table-bordered" >
+                <thead class="table-dark">
+                <tr>
+                    <th class="text-center"> Date and Time</th>
+                    <th>Type Of Visit</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Details</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+
+            </thead>
+                <tbody class="bg-mustardlite">
+                
+                    @if (Model.View != null && Model.View.Appointments != null && Model.View.Appointments.Items.Count > 0)
+                    {
+
+                        
+                            foreach (var appointment in Model?.View?.Appointments?.Items)
+                            {
+                                <tr>
+                                    <td> @appointment.StartTime.Value.ToString("dd/MM/yyyy")  @appointment.StartTime.Value.ToString("H:mm tt") - @appointment.EndTime.Value.ToString("H:mm tt") </td>
+                                    <td>@appointment.Visit</td>
+                                    <td>@appointment.Status</td>
+                                    
+                                    <td>
+                                    @if (appointment.Status != Status.Completed)
+                                    {
+                                        <button href="~" class="btn btn-success" disabled>   
+                                            <i class="fa fa-pencil">View</i>
+                                        </button>
+                                      
+                                    }
+                                   
+                                    else{
+                                        foreach (var consultationRecord in Model?.View?.ConsultationRecords)
+                                        {
+                                            if(consultationRecord.AppointmentID == appointment.ID)
+                                            {
+                                                <!--Button For Modal Trigger-->
+                                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="@string.Format("#pfmodal{0}", appointment.ID)">
+                                                    <i class="fa fa-pencil">View</i>
+                                                </button>
+                                                <!--Button For Modal Trigger-->
+
+
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="@string.Format("pfmodal{0}", appointment.ID)" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content bg-mustardlite">
+                                                            <div class="modal-header bg-mustardlite">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Findings And Prescriptions</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>                                                       
+                                                            </div>
+                                                            <div class="modal-body bg-mustardlite">
+                                                                <div class="col-auto ">
+                                                                    <!-- Prescription and Finding -->
+                                                                    @if(Model?.View?.Prescriptions != null){
+                                                                        @foreach(var prescription in Model?.View?.Prescriptions)
+                                                                        {
+                                                                            if(prescription.ConsultationRecordID == consultationRecord.ID)
+                                                                            {
+                                                                                <div class="card bg-mustardlite">
+                                                                                    <div class="card-header">
+                                                                                        <span>PRESCRIPTIONS</span>
+                                                                                    </div>
+                                                                                    <div class="card-body">
+                                                                                        <div class="card-group">
+                                                                                            <span> Tags:@prescription.Tags</span>
+                                                                                        </div>
+                                                                                        <div class="card-group">
+                                                                                            <span>  Descriptions:@prescription.Description</span>
+                                                                                        </div>
+                                                                                        
+                                                                                    </div>
+                                                                                </div>
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    @if (Model?.View?.Findings != null)
+                                                                    {
+                                                                        @foreach (var finding in Model?.View?.Findings)
+                                                                        {
+                                                                            if (finding.ConsultationRecordID == consultationRecord.ID)
+                                                                            {
+                                                                                <div class="card bg-mustardlite">
+                                                                                    <div class="card-header">
+                                                                                        <span>FINDINGS</span>
+                                                                                    </div>
+                                                                                    <div class="card-body">
+                                                                                      
+                                                                                        <div class="card-group">
+                                                                                            <span>Tags: @finding.Tags</span>
+                                                                                        </div>
+                                                                                        <div class="card-group">
+                                                                                            <span> Descriptions: @finding.Description</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                
+                                                                                
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    <!-- Prescription and Finding -->
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Modal -->
+                                                
+                                            }
+                                        }
+                                    }
+                                    </td>
+
+                                    <td>
+                                    @if (appointment.Status == Status.Pending)
+                                    {
+                                        <!--Button For Modal Trigger-->
+                                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@string.Format("#editmodal{0}", appointment.ID)">
+                                            <i class="fa fa-pencil">Edit</i>
+                                        </button>
+                                        <!--Button For Modal Trigger-->
+                                        <!--Modal-->
+                                        <div class="modal " id="@string.Format("editmodal{0}",appointment.ID)" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content bg-mustardlite">
+                                                    <div class="modal-header ">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                                                    </div>
+
+                                                    <div class="modal-body bg-mustardlite">
+                                                        <div class="col-auto">
+
+                                                            <form method="Post" asp-page-handler="Edit">
+                                                                <div class="form-group">
+                                                                    <label asp-for="View.FirstName">Symptoms</label>
+                                                                    <input type="text" class="form-control" placeholder="Enter FirstName" asp-for="View.Symptom" value="@appointment.Symptom">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <input type="hidden" class="form-control" placeholder="Enter Address" asp-for="View.SymptomID" value="@appointment.ID">
+                                                                </div>
+
+
+                                                                <div class="form-group alert-danger">
+                                                                    @Html.ValidationSummary()
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <button type="submit" class="btn btn-primary">Save</button>
+                                                                    <a href="~/manage/admin/dashboard" class="btn btn-secondary">Cancel</a>
+                                                                </div>
+
+
+
+                                                            </form>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+
+
+                                        <!--Button For Modal Trigger-->
+                                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@string.Format("#cancelmodal{0}", appointment.ID)">
+                                            <i class="fa fa-pencil">Cancel Appointment</i>
+                                        </button>
+
+                                        <!--Modal-->  <!--Button For Modal Trigger-->
+                                        <!--Modal-->
+                                        <div class="modal " id="@string.Format("cancelmodal{0}",appointment.ID)" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header ">
+                                                        <h5 class="modal-title" id="exampleModalLabel1>Are you sure you want to cancel this appointment</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                                                    </div>
+
+                                                    <div class="modal-body bg-mustardlite">
+                                                        <div class="col-auto">
+
+                                                           
+                                                          
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <div class="col-auto">
+
+                                                                <form method="Post" asp-page-handler="Cancel">
+                                                                    <div class="form-group">
+                                                                        <input type="hidden" class="form-control" placeholder="Enter Address" asp-for="View.StatusId" value="@appointment.ID">
+                                                                    </div>
+
+                                                                    <a href="~/manage/patient/dashboard" class="btn btn-secondary">No</a>
+                                                                    <button type="submit" class="btn primary">Yes</button>
+                                                                </form>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+
+                                    }
+                                    else
+                                    {
+
+                                        <button type="button" class="btn btn-info" disabled>
+                                            <i class="fa fa-pencil">Edit</i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger" disabled>
+                                            <i class="fa fa-pencil">Cancel Appointment</i>
+                                        </button>
+
+
+                                    }
+
+
+                                    </td>
+                                </tr>
+                            }
+                        
+                    }
+                </tbody>
+
+            </table>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    @{
+                        if (Model?.View?.Appointments?.PageIndex > 1)
+                        {
+                            <li class="page-item"><a class="page-link" href="/manage/patient/Dashboard?pageIndex=@(Model?.View?.Appointments?.PageIndex-1)&pageSize=@(Model?.View?.Appointments?.PageSize)&sortBy=@(Model?.View?.Appointments?.SortBy)&sortOrder=@(Model?.View?.Appointments?.SortOrder)">Previous</a></li>
+                        }
+
+                        <li class="page-item"><span class="page-link">page @Model?.View?.Appointments?.PageIndex of @Model?.View?.Appointments?.PageCount (@Model?.View?.Appointments?.TotalRows total rows)</span></li>
+
+
+                        if (Model?.View?.Appointments?.PageIndex < Model?.View?.Appointments?.PageCount)
+                        {
+                            <li class="page-item"><a class="page-link" href="/manage/patient/Dashboard?pageIndex=@(Model?.View?.Appointments?.PageIndex+1)&pageSize=@(Model?.View?.Appointments?.PageSize)&sortBy=@(Model?.View?.Appointments?.SortBy)&sortOrder=@(Model?.View?.Appointments?.SortOrder)">Next</a></li>
+                        }
+                    }
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts{
+
+    <script>
+
+        window.addEventListener("load", () => {
+            var link = "https://localhost:7141/manage/admin/viewpatient?id=" + "@ViewData["PatientID"]"
+            var qrc = new QRCode(document.getElementById("qrcode"), link);
+        });
+        $("#rprint").click(function () {
+
+
+            var prtContent = document.getElementById("printable");
+            var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+            WinPrint.document.write(prtContent.innerHTML);
+            WinPrint.document.close();
+            WinPrint.focus();
+            WinPrint.print();
+            WinPrint.close();
+        });
+
+    </script>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var url = window.location.href;
+            var activeTab = url.substring(url.indexOf("#") + 1);
+            if ( activeTab == "rec") {
+                $(".tab-pane").removeClass("active");
+                $("#" + activeTab).addClass("active");
+                $(".nav-link").removeClass("active");
+                $("#Nav" + activeTab).addClass("active");
+                $('a[href="' + activeTab + '"]').tab('show')
+
+            }
+        });
+
+        
+
+        });
+        $("#recfilterBy").change(function () {
+            window.location = "/manage/patient/dashboard?keyword=@(Model.View.Appointments?.Keyword)&sortBy=" + $("#aptssortBy").val() + "&sortOrder=" + $("#aptssortOrder").val() + "&status=" + $("#recfilterBy").val() + "&date=" + $("#recfilterDate").val() + "#rec";
+        });
+        $("#recfilterDate").change(function () {
+            window.location = "/manage/patient/dashboard?keyword=@(Model.View.Appointments?.Keyword)&sortBy=" + $("#aptssortBy").val() + "&sortOrder=" + $("#aptssortOrder").val() + "&status=" + $("#recfilterBy").val() + "&date=" + $("#recfilterDate").val() + "#rec";
+        });
+
+        function getPraetors(id) {
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: '?handler=Praetors&id=' + id,
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                success: function (data) {
+                    if (data) {
+                        $("#praetorsListModalUl").html("");
+                        $.each(data, function (index, item) {
+                            $("#praetorsListModalUl").append("<li>" + item + "</li>")
+                        });
+                        $("#praetorsListModal").modal("show");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr);
+                }
+            });
+        }
+
+
+
+    </script>
+
+    <script type="text/javascript">
+    $('.selectSymptomas').select2({
+        ajax: {
+                url: '?handler=symptom',
+            data: function (params) {
+                var query = {
+                    keyword: params.term,
+                    page: params.page || 1
+                }
+                return query;
+            },
+            headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+        }
+    });
+</script>
+}
+
